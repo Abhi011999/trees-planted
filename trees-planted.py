@@ -16,12 +16,12 @@ api = tweepy.API(auth)
 while (True):
     html = urllib.request.urlopen("https://www.teamtrees.org/")
     last = open("last.txt", "r+")
-    previous = float(last.read(4))
+    previous = int(last.read(4).replace('.', ''))
     soup = BS(html, "html.parser")
     count = int(soup.findAll('div', {'id': 'totalTrees'})[0].get('data-count').strip())
     percent = round(float((count / 20000000) * 100), 1)
 
-    if percent > previous:
+    if int(str(percent).replace('.', '')) > previous:
         tweet = str(count) + "/" + "20000000 (" + str(percent) + "%) Trees Planted #TeamTrees teamtrees.org"
         print(tweet)
         status = api.update_status(tweet)
