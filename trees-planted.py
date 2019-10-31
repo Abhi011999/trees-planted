@@ -3,7 +3,6 @@ import urllib.request
 import tweepy
 import time
 from os import environ
-previous = 0
 
 CONSUMER_KEY = environ['CONSUMER_KEY']
 CONSUMER_SECRET = environ['CONSUMER_SECRET']
@@ -16,6 +15,8 @@ api = tweepy.API(auth)
 
 while (True):
     html = urllib.request.urlopen("https://www.teamtrees.org/")
+    last = open("last.txt", "r+")
+    previous = float(last.read(4))
     soup = BS(html, "html.parser")
     count = int(soup.findAll('div', {'id': 'totalTrees'})[0].get('data-count').strip())
     percent = round(float((count / 20000000) * 100), 1)
@@ -25,5 +26,11 @@ while (True):
         print(tweet)
         status = api.update_status(tweet)
         print(status)
-        previous = percent
+        last.close()
+        last = open('last.txt', 'w+')
+        previous = last.write(str(percent))
+        last.close()
+    else:
+        print('Percentage not updated')
+        last.close()
     time.sleep(10)
