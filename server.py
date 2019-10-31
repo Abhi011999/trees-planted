@@ -5,8 +5,7 @@ app = Flask(__name__)
 @app.route("/")
 
 def server():
-    return "trees-planted Web Server in Flask"
-    return "Deployed on Heroku\n"
+    return "trees-planted Web Server in Flask.\nDeployed on Heroku\n"
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=environ.get('PORT'))
