@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup as BS
-import urllib.request
+from urllib.request import Request, urlopen
 import tweepy
 import time
 from os import environ
@@ -14,7 +14,8 @@ auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 
 while (True):
-    html = urllib.request.urlopen("https://www.teamtrees.org/")
+    req = Request("https://www.teamtrees.org/", headers={'User-Agent': 'Mozilla/5.0'})
+    html = urlopen(req)
     last = open("last.txt", "r+")
     previous = int(last.read(4).replace('.', ''))
     soup = BS(html, "html.parser")
